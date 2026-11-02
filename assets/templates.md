@@ -117,7 +117,7 @@
 | LOCATION MAP | {多角色场景必写：各角色/道具固定位置、朝向、距离。**距离常数写死**：对峙{十步约六米，一步≈0.6米}/追逐{八步约五米}/贴身{不到半臂}——情景图提示词逐画面复述} |
 | 可用站位物件 | {从场景参考图里实际可见的物件登记 4-20 件：能站/能坐/能倚的——提示词写了但图上没有的不许登记} |
 | 站位句 | {每人一条：在哪件东西哪一侧+沿侧多远+坐/站+八方位朝向；末尾必写"其余座位空着，没有其他人"（群演默认0）；每张情景图的主体位置槽逐字照抄} |
-| 参考图路径 | assets/{场景名}_ref.png{；被≥3画面使用或有正反打 → 四视图：_ref_front/_ref_reverse/_ref_45/_ref_top 全登记} |
+| 参考图路径 | assets/{场景名}_ref.png{；被≥3画面使用或需要多机位素材 → 四视图：_ref_front/_ref_reverse/_ref_45/_ref_top 全登记} |
 
 ## 道具锚定表（命中判定规则任一即入表——六条判定全文见 prompt-rules.md 一节·骨架 0 道具判定规则）
 
@@ -143,7 +143,7 @@
 ````markdown
 # {项目名} · 图片提示词
 
-> 本文件所有人物/道具/场景参考图与情景图均在阶段2产出（imgen 无阶段2-4 之分）。
+> 本文件所有人物/道具/场景参考图与情景图：本模板统一在阶段2 产出。
 
 ## 资产引用矩阵（先建矩阵后写提示词——零引用资产不生成）
 
@@ -160,7 +160,7 @@
 > 矩阵规则：零引用的资产不生成；情景图按 H1-H4 分级判定；矩阵随资产清单修改同步更新。**先矩阵后提示词。先查存量——命中即复用不重建**。**例外（USER-LOCKED）**：用户点名的成品资产（独立服装/道具/场景设定图等非纯参考图资产）不受零引用限制——USER-LOCKED > 系统默认，矩阵"生成必要性"列注明 USER-LOCKED 理由。
 > 画布项目：定稿图另存节点 ID（防重生成污染）。
 > 状态互参 / 外部原型在"生成必要性"格注明引用自（如"必生成（引用自：完整态）"），主矩阵不另设列。
-> 情景图分级（H1-H4）与每批参考图 ≤9 的取舍次序：全文见 **prompt-rules.md 一节3**（唯一的家）。要点：不是每画面一张（一次生成只有一个首帧位）；超上限砍末位，**道具图与角色面部特写不许被挤掉**。
+> 情景图分级（H1-H4）与参考图组配取舍次序（组配上限按目标模型实测能力，见 models.md 与 SKILL 能力实测优先）：全文见 **prompt-rules.md 一节3**（唯一的家）。要点：不是每画面一张（一次生成只有一个首帧位）；超上限砍末位，**道具图与角色面部特写不许被挤掉**。
 > **互挂参考（状态互参）**：情景图挂角色锚定图+场景母版图；同场景异状态画面挂已定稿的**基准参考图**（声明"只锁空间布局/光线方向/主体比例，不锁姿势与表情"）；服装改版时挂上一版防漂回旧设定。规则见 consistency.md 三节图片端。
 
 ## 内容安全措辞规范（命中高危题材时建本节——本项目已命中模式登记，全项目通用）
@@ -203,10 +203,12 @@ A character three-view reference sheet, flat even studio lighting.
 {锚定短语的体型/发型/服装要素逐字；头部只写轮廓与发型，不写眼型/鼻梁/唇形细节——五官细节由 0b 面部特写承担}。three-view reference sheet: front view, side view and back view of the same character standing in a relaxed neutral pose, full body, side by side, evenly spaced, equal height。
 same person in all three views, consistent height, hairstyle, outfit and details across views。纯白背景，无分割线、无边框、无道具、无文字标注。
 natural skin texture, visible pores, realistic and imperfect。
+Aspect ratio 3:2
 ```
 
 > 生成后裁出三视图分别存 {角色名}_front/_side/_back.png。
 > **0a 与 0b 分工**：0a 三视图管比例/服装/轮廓，锚定短语里含五官的条目（眉骨/眼型/鼻梁/唇形）**不在 0a 展开**，只写头部轮廓与发型——否则与"0b 脸占 6 成以上锁五官"抢职责，三视图小脸也画不清那些细节。**0a 与 0b 必须分两张出图，不许合成一张"设定图"交差**。
+> **动漫/国漫设定项目**可用四视图合并例外（左侧正脸特写+右侧三视图同图，配方见 cinema-grade-params 二节，脸区占足像素），写实项目仍分两张出图。
 > 派生视图/特写用改图技法（prompt-rules 骨架0a）：构图指令放句首/正面几何化（禁 three-quarter）/背面 Rotate 180 只写背面可见物/一致性清单按视图取层/长几何段结尾重申取景/细节部位要小。
 > 参考图技术规格：单边 300-5760px、比例 0.4-2.5、≤20MB；全身 2:3 / 大头照 4:5 / 道具细节 1:1。
 
@@ -216,6 +218,7 @@ natural skin texture, visible pores, realistic and imperfect。
 A head-and-shoulders portrait reference photo, medium-format camera, 85mm f/2, flat even studio lighting.
 {锚定短语中的头部要素逐字}。正面平视，头部完整居中，表情平静，纯白背景。
 natural skin texture, visible pores, realistic and imperfect。
+Aspect ratio 4:5
 ```
 
 ### {角色名} · 0c 按需补充锚（≤2 张）
@@ -223,12 +226,15 @@ natural skin texture, visible pores, realistic and imperfect。
 - 表情板：`expression studies sheet, same face: neutral, smiling, sad, angry, front view, plain white background`
 - 服装细节图：{花纹复杂服装的单独特写}
 
+> 画幅：每条补充锚提示词写 `Aspect ratio 1:1`。
+
 ### {角色名} · 0d 白底正面图（产物/动物主角用）
 
 ```
 {拍摄媒介句}。
 {锚定短语逐字}。正面全身像，自然放松站姿，纯白背景，人物完整居中。
 natural skin texture, visible pores, realistic and imperfect。
+Aspect ratio 1:1
 ```
 
 ## 一·五、服装换装参考图（每套独立锚定；0a 同规格白底全身）
@@ -266,6 +272,7 @@ A prop reference photo, {材质对应媒介句}, flat even studio lighting.
 A pattern/design reference sheet, flat even lighting, no perspective distortion.
 {图案内容与配色描述，含十六进制色号}，图案完整居中占画面 70% 以上，平铺展开。
 纯色背景（中性灰或白）。
+Aspect ratio 1:1
 ```
 
 ## 三、场景参考图
@@ -283,7 +290,7 @@ A pattern/design reference sheet, flat even lighting, no perspective distortion.
 Aspect ratio {画幅}
 ```
 
-### {场景名} · 四视图（被≥3画面使用或有正反打时，配方见 extended-views.md）
+### {场景名} · 四视图（被≥3画面使用或需要多机位素材时，配方见 extended-views.md）
 
 - 视图2 对向回望：`以图片1为场景母版，生成同一场景对向反向平视回望`
 - 视图3 斜角全景：`以图片1为场景母版，生成同一场景的45°俯视斜角全景`
@@ -306,7 +313,7 @@ Aspect ratio {画幅}
 {逐图用途声明}
 {拍摄媒介句}。
 {锚定短语逐字}，{在场景中的位置与朝向——按 LOCATION MAP}。
-{H1/H3：蓄力瞬间描述——有势能不锁定方向}。{H2 反先验/接触类：姿势锁定描述——该画面首帧必须精确呈现这个姿势（如"两刃呈十字相抵、刀锋压着剑脊"或"右腿蹬住弓臂、双手向后拉满弦"），因为纯文字提示词无法生成此动作，此时"势能不锁定方向"让位于"姿势精确锁定"}
+{H1/H3：画面定格五标准描述——有势能不锁定方向}。{H2 反先验/接触类：姿势锁定描述——该画面首帧必须精确呈现这个姿势（如"两刃呈十字相抵、刀锋压着剑脊"或"右腿蹬住弓臂、双手向后拉满弦"），因为纯文字提示词无法生成此动作，此时"势能不锁定方向"让位于"姿势精确锁定"}
 {景别}，{机位}，off-center composition，{前景遮挡元素}。
 光线：{光线锚逐字}。
 色调：{继承场景图色板：环境底色/中间调/点缀色/暗部十六进制色号}。
@@ -317,7 +324,7 @@ No text, no watermark, no borders — a single clean full-bleed frame.
 ```
 
 > 锚定范围：全景/中景→锚定短语全文逐字；特写/近景→允许"头部要素+画面可见部分"的逐字子集（顺序不变），身形由参考图组配兜底
-> 蓄力检查（H1）：{从什么状态开始动？首帧势能够吗？面朝方向留 2/3 空间了吗？}
+> 画面定格五标准检查（H1）：{构图完整吗？姿势有势能（叙事画面）或状态清晰（资产画面）吗？面朝方向留 2/3 空间了吗？身份清晰可辨吗？与同套其他画面光线一致吗？}
 > 姿势检查（H2）：{反先验动作的每个接触点/支撑点/角度都写清了吗？这张图生成的姿势与该画面提示词的主体姿势描述逐字一致吗？}
 > 视图检查：{机位正面/侧面/背面/特写？组配匹配吗？特写带面部锚定图了吗？道具带对应状态图了吗？}
 > 语义绑定检查（prompt-rules.md 0.1）：{位置关系写的是"谁在谁后面/谁挡住谁"而非坐标？元素之间有因果作用而非并列罗列？抽象概念是否调用了高密度先验词（"血月"胜"红色的月亮"）？}

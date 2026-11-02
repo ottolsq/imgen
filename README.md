@@ -33,7 +33,7 @@ imgen/
 │   └── content-safety.md       # 扩展：拦截后降级阶梯 / 内容安全
 ├── assets/
 │   └── templates.md            # 01-03 项目文件模板与填空槽位
-└── tests/                      # 预留验收脚本（运行时不读）
+└── tests/                      # 验收记录（运行时不读）
 ```
 
 结构口径：`references/` = 核心 5（prompt-rules / consistency / realism / styles / models）+ 扩展 5（expressions / extended-views / cinema-grade-params / emotion-craft / content-safety）+ 路由 1（knowledge-index）。
