@@ -246,7 +246,7 @@ A full-body character costume reference photo, flat even studio lighting.
 Full body, natural neutral standing pose, arms relaxed at the sides, hands empty, facing the camera, entire figure centered, pure white background, no props, no text.
 same person as the face reference, consistent height, hairstyle and outfit details.
 natural skin texture, visible pores, realistic and imperfect.
-Aspect ratio 3:4
+Aspect ratio 2:3
 ```
 
 ## 二、道具参考图（命中六条判定规则的道具，每状态一张）
