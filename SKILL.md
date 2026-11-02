@@ -1,6 +1,6 @@
 ---
 name: imgen
-description: Use when the user wants to create AI image assets or image prompts — 人物设定图/三视图/角色转面/面部特写/表情板/微表情/服装设计图/换装/服装设定/道具设定图/场景概念图/环境图/情景图/画面插画/海报/文生图提示词/AI绘画/绘画提示词/生图/角色资产/多视图/四视图/一致性锚定/去AI味/风格圣经/参考图组配/character sheet/turnaround/concept art/reference sheet. NOT for video generation or 分镜/运镜/视频提示词（use vigen）, NOT for calling image-generation APIs directly, NOT for screenwriting or storyboarding.
+description: Use when the user wants to create AI image assets or image prompts — 人物设定图/三视图/角色转面/面部特写/表情板/微表情/服装设计图/换装/服装设定/道具设定图/场景概念图/环境图/情景图/画面插画/海报/文生图提示词/AI绘画/绘画提示词/生图/角色资产/多视图/四视图/一致性锚定/去AI味/风格圣经/参考图组配/character sheet/turnaround/concept art/reference sheet. NOT for video generation or 分镜/运镜/视频提示词（use vigen）, NOT for calling image-generation APIs directly, NOT for screenplay writing or storyboarding.
 ---
 
 # imgen（AI 图片资产制作辅助）
@@ -21,7 +21,7 @@ description: Use when the user wants to create AI image assets or image prompts 
 | 表情 | 表情板、微表情、画面表演状态 | expressions.md（FACS 引擎） |
 | 服装 | 换装、多状态、服装细节图 | consistency 一·角色锚定（服装字段）/ 三·五节 |
 | 道具 | 白底道具图、图案特写、状态链 | prompt-rules 一·0d / 道具六条判定 |
-| 环境 | 场景概念图、四视图、环境球 | prompt-rules 一·2 / extended-views |
+| 环境 | 场景概念图、四视图、环境球 | prompt-rules 一·2 / extended-views / realism 一·媒介句 |
 | 画面 | 情景图 H1-H4、插画、海报 | prompt-rules 一·3 / realism 三节 |
 
 ## 本文件的定位（读之前先懂）
@@ -50,7 +50,7 @@ description: Use when the user wants to create AI image assets or image prompts 
 
 | 文件 | 何时读 |
 | --- | --- |
-| **references/prompt-rules.md** | **写任何提示词之前**（含 0 底层认知与 12 槽） |
+| **references/prompt-rules.md** | **写任何提示词之前**（含零、底层认知与 12 槽） |
 | references/models.md | **GATE0 确定模型时**；更换模型时 |
 | references/styles.md | **阶段1 定风格时**——选定风格后立即定色板 |
 | references/consistency.md | **阶段1 建锚定表（02）时**；跨资产一致性出问题时 |
@@ -109,6 +109,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 聊天中呈现**锚定短语全文**（角色/服装/道具/场景）+ **风格圣经全文** + **色彩基调（色号+落点）** + 目标模型与供应商，等用户确认后才冻结。归属优先级 `USER-LOCKED > 参考图/风格提取的既定裁决 > 系统默认补全`；此处的修改成本最低。确认结论写入 01"GATE1 锚定确认记录"节。
 
 **阶段2 资产矩阵 + 提示词**
+- **做什么**：先查存量 → 建资产引用矩阵 → 出锚定图 → 出情景图（互挂参考 + H1-H4 分级）→ 首批验收 → 铺量并按结果状态登记。
 - **读什么**（按命中读，不整套全读）：
 
   | 命中场景 | 读 |
@@ -177,7 +178,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 | --- | --- | --- |
 | 1 | **槽位完整且单值**：图片 12 槽任一为空必须按主题补默认值；光线/景别每维度只留一个值（矛盾=模型随机选边=不可控） | prompt-rules 二节 |
 | 2 | **反空话**：摄影机/测光表检测不到的词（电影感/史诗感/8K/氛围感）改写成具体维度；色调必用十六进制色号+颜色落在哪里，不写"暖色调/低饱和"倾向词 | realism 二节·慎用词 / styles 色彩基调 |
-| 3 | **核心锚点冻结**：角色/服装/道具/场景锚定短语、风格圣经、色板在每条提示词中逐字出现；非常规着装**逐部位列"有/无"**（单一否定句锁不住着装）；02 变更即刻失效传播 | consistency 一·二节 / prompt-rules A1 |
+| 3 | **核心锚点冻结**：角色/服装/道具/场景锚定短语、风格圣经、色板在每条提示词中逐字出现；非常规着装**逐部位列"有/无"**（单一否定句锁不住着装）；02 变更即刻失效传播 | consistency 一·二节 / consistency 四节（失效传播） / prompt-rules A1 |
 | 4 | **正向引导 > 负面约束**：画面类负面词改写成正向；**图片端承重负面保留**（版式类/文字类/内容边界类/身份划界类），分端裁决唯一权威 | knowledge-index 负面词适配规则 / prompt-rules 0.3 |
 | 5 | **道具锚定**：命中六条判定任一 → 独立参考图+锚定短语；有状态变化每状态一张；可分离组合道具拆分出图；**道具单一存在**（持械手/鞘位/双手占用三要素） | prompt-rules 一·0 与 0d / consistency 道具锚定 |
 | 6 | **顺模型认知写**：语义绑定三层（绑位置关系/绑因果/绑先验概念包）；关系反先验必写**排他性否定**；复杂姿态用**图锁姿势**、**入画即成**（不写成型过程） | prompt-rules 0.1·0.2 |

@@ -78,7 +78,7 @@
 **三眼测试（海报/版式类图的验收框架）**：一眼认剪影与主题（3 秒内知道这是什么）→ 二眼读叙事与承诺（主标题/slogan/核心信息层级清楚）→ 三眼近看材质、小字、背景（细节经得起放大）。验收时按三眼顺序扫；任一眼卡住=对应层级返工。**加一条实测排查：模型自加的文字/价格/参数/假品牌逐项对照白名单清除**（Sunburst 实测会自加未批准文案）。
 
 **海报文案层级清单**（多层级文字版面逐字写全，别让模型编）：主标题/副标/slogan/价格/活动条款/推荐语/fine print（"图片仅供参考"）逐条列出 + `Pay special attention to small text, numbers, prices, info modules`；电影海报 credit block 分区（PRODUCERS…/DIRECTED BY…/A … RELEASE）与杂志封面 masthead/date strip/cover lines/barcode 分区同理——中文版面加锁 `All text in Simplified Chinese, no garbled characters, no English, no pinyin`。
-**漫画页文字策略**（漫剧项目）：对白易翻车时留白气球——`Dialogue balloons intentionally blank; only the two sound effects are visible`（拟声词"バッ"替代对白，对白后期字幕/配音承担）；大字填负空间（水墨大字"決"作构图元素）。
+**漫画页文字策略**（漫剧项目）：对白易翻车时留白气球——`Dialogue balloons intentionally blank; only the two sound effects are visible`（拟声词"バッ"替代对白文字）；大字填负空间（水墨大字"決"作构图元素）。
 **剪影内嵌世界观**（框中框变体，海报/概念图）：`The outer silhouette is a side profile; inside that silhouette a complete world naturally grows: observatories, floating stairways…` + 防拼贴句 `narrative silhouette composition rather than a collage`。
 
 **叙事化文字缺陷（生活痕迹的升级版——瑕疵要有故事）**：残缺文字写成剧情而非随机损坏——`neon sign "HOTE_" (the L flickered out)`（哪个字母坏了、为什么坏）；旧物带时间戳叙事（"08/13/96 04:44 AM"）。比"略微破损"更可控：模型知道该画成什么样。
@@ -89,7 +89,7 @@
 | photorealistic / hyperrealistic（英文单词） | a photograph + 相机参数。社区观察：触发"画得很像照片的绘画"风格；**但官方 Cookbook（Image 2 时代）明确推荐直用该词**（"strongly engage the model's photorealistic mode"）——两说相抵，A/B 验证须分 Image 2 与 2.5 各跑一组 `[待A/B验证]`；中文提示词"照片级真实感"大量成品验证无碍可用 |
 | 8K / ultra HD / masterpiece | 具体质感词（film grain / skin texture）。质量词堆砌分体裁：写实摄影类有害（"百语并列一画失"）；动漫贴纸类可容忍（见 knowledge-index 负面词适配） |
 | beautiful / stunning / amazing | 具体构图光线描述 |
-| 画面质量类否定词（"不要塑料感皮肤"） | **正向引导**：把概率推到想要的样子（"natural skin texture with visible pores"）。效力分端裁决见 **knowledge-index.md 负面词适配规则**（唯一的家）——一句话要点：视频端画面类无效、图片端版式/内容边界类有效、质量美学类走正向 |
+| 画面质量类否定词（"不要塑料感皮肤"） | **正向引导**：把概率推到想要的样子（"natural skin texture with visible pores"）。效力裁决见 **knowledge-index.md 负面词适配规则**（唯一的家）——一句话要点：图片端版式/内容边界类有效、质量美学类走正向 |
 | portrait（单独出现） | medium shot + off-center + 机位（单独 portrait 默认头像式构图） |
 | "暖色调/低饱和"倾向词 | 十六进制色号+颜色落在哪里（见 styles.md 色彩基调） |
 
@@ -153,7 +153,7 @@
 **原负面提示词清单**（保留原文——后续换用支持负面提示词的生图模型时直接使用）：
 > 干净如僵硬，肢体僵硬漂浮，动作不符合物理逻辑，塑料感皮肤，陶瓷板光滑肌肤，过度磨皮，无暇假脸，AI失真的，过度完美的不真实质感
 
-适配规则（见 knowledge-index.md）：图片提示词用上面的正向维度描述即可（以正向表述为主）；视频提示词的负面概念集中写进骨架 A 的 NO 节或骨架 B 约束槽；支持负面提示词的模型原文直接可用。
+适配规则（见 knowledge-index.md）：图片提示词用上面的正向维度描述即可（以正向表述为主）；支持负面提示词的模型原文直接可用。
 
 ## 六、实操要点
 
