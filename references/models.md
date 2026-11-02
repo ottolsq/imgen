@@ -45,7 +45,7 @@
 
 ## 已知差异备忘（[待验证]——实测后回填裁决）
 
-- **photorealistic 英文单词的效力**：官方 Cookbook（Image 2 时代）明确推荐直用该词（"strongly engage the model's photorealistic mode"），与社区"触发绘画感"观察相抵，可能是代际差异——A/B 须分 Image 2 与 2.5 各跑一组再裁决 `[待验证]`
+- photorealistic 英文词的效力 A/B —— 归属与写法见 knowledge-index.md 负面词适配规则（唯一权威），本文件不再重复。
 
 ## 供应商差异备忘（同模型不同 provider——实测确认后登记）
 
