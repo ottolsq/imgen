@@ -157,7 +157,7 @@
 | 画面4 情景图（接触类动作/反先验） | — | **H2** | 必生成（锁姿势） |
 | 画面3 情景图（特写/微距/过渡/空镜） | — | H4 | **不生成**（面部锚定图+文字承载） |
 
-> 矩阵规则：零引用的资产不生成；情景图按 H1-H4 分级判定；矩阵随资产清单修改同步更新。**先矩阵后提示词。先查存量——命中即复用不重建**。
+> 矩阵规则：零引用的资产不生成；情景图按 H1-H4 分级判定；矩阵随资产清单修改同步更新。**先矩阵后提示词。先查存量——命中即复用不重建**。**例外（USER-LOCKED）**：用户点名的成品资产（独立服装/道具/场景设定图等非纯参考图资产）不受零引用限制——USER-LOCKED > 系统默认，矩阵"生成必要性"列注明 USER-LOCKED 理由。
 > 画布项目：定稿图另存节点 ID（防重生成污染）。
 > 状态互参 / 外部原型在"生成必要性"格注明引用自（如"必生成（引用自：完整态）"），主矩阵不另设列。
 > 情景图分级（H1-H4）与每批参考图 ≤9 的取舍次序：全文见 **prompt-rules.md 一节3**（唯一的家）。要点：不是每画面一张（一次生成只有一个首帧位）；超上限砍末位，**道具图与角色面部特写不许被挤掉**。
@@ -229,6 +229,24 @@ natural skin texture, visible pores, realistic and imperfect。
 {拍摄媒介句}。
 {锚定短语逐字}。正面全身像，自然放松站姿，纯白背景，人物完整居中。
 natural skin texture, visible pores, realistic and imperfect。
+```
+
+## 一·五、服装换装参考图（每套独立锚定；0a 同规格白底全身）
+
+> **每套服装一条独立锚定短语**；本套服装外观以本套锚定为唯一权威，**不沿用另一套服装的词**（换装头号漂移源见 consistency 三·五节）。
+> **身份参考**：生成时挂该角色面部特写作身份参考——`@Ref = 面部特写。锁定：脸型/五官/发型；不复刻：其构图与背景`。
+> **每套服装各出一张**；一张模板只放同款占位（服装 A 与服装 B 各复制一份）。
+
+### {角色名} · {服装名}换装全身
+
+```
+A full-body character costume reference photo, flat even studio lighting.
+{年龄/体型/脸型/发型逐字——身份要素}
+身穿：{本套服装锚定短语逐字（款式/颜色含色号/材质/配饰/磨损）}
+Full body, natural neutral standing pose, arms relaxed at the sides, hands empty, facing the camera, entire figure centered, pure white background, no props, no text.
+same person as the face reference, consistent height, hairstyle and outfit details.
+natural skin texture, visible pores, realistic and imperfect.
+Aspect ratio 3:4
 ```
 
 ## 二、道具参考图（命中六条判定规则的道具，每状态一张）

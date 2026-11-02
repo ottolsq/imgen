@@ -6,6 +6,8 @@
 
 按风格选用，一句定调真实感：
 
+**兼容规则**：媒介句的机型/镜头是语法层，必须与所选风格圣经兼容；两者冲突时**以风格圣经为准**（风格圣经是冻结字段，媒介句可改）。
+
 | 场景类型 | 媒介句 |
 | --- | --- |
 | 人物参考（棚拍） | A character reference photo shot on medium-format camera, 85mm f/4, soft even studio lighting |
