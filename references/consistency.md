@@ -108,6 +108,8 @@
 
 > 触发场景：产出时挂参考图（换装、换姿势、换表情、角色与场景合成）。核心原理：**生图模型读参考图的像素，文本模型读参考图的语义摘要**——两者之间有天然信息差。提示词要善用图，不要与图打架。
 
+**为什么"绝不文图矛盾"（社区经验）**：模型默认文本权重高于参考图——文字缺少强约束或与参考图冲突时，会按文本生成，参考特征丢失。因此参考图负责"长什么样"，文本只写差异项与身份锁定句；发现矛盾先修锚定/参考图，不在提示词里叠形容词对抗。
+
 ### 文图信息分工（谁说什么话）
 
 | 信息 | 权威来源 | 提示词怎么写 |
@@ -151,6 +153,8 @@
 | 换装 | 新服装锚 + 面部特写（+场景） | 姿势/构图/表情/光线 + "服装以 @Ref 为准" | 沿用旧服装锚定短语 → 衣服回漂；挂旧版三视图 → 混搭 |
 | 换姿势 | 面部特写 + 三视图（+场景） | 目标姿势写具体（FACS/身体序列），参考图声明不复刻站姿 | 未声明不复刻 → 出正立站姿；姿势描述用"自然放松"式空话 |
 | 换表情 | 面部特写 + 场景 | 表情按 FACS 物理化（肌肉/瞳孔/注视），不用情绪标签 | 喂表情参考图又与中性锚冲突；只写"生气的表情"→ 表情不到位 |
+
+**浅层/深层特征（社区经验）**：颜色、毛发、轮廓易保留；脸型结构、五官比例、姿态骨架、配饰位置易变形——深层结构必须靠图分工+文字强约束。精细特征（斑纹数量/虎牙颗数/挑染位置）用精确计数与单侧描述（"一颗，不是两颗"）。
 
 > **官方换装范式（OpenAI Cookbook 原文，可逐字复用）**：Do not change her face, facial features, skin tone, body shape, pose, or identity in any way. Preserve her exact likeness, expression, hairstyle, and proportions. Replace only the clothing, fitting the garments naturally to her existing pose and body geometry with realistic fabric behavior. Match lighting, shadows, and color temperature to the original photo so the outfit integrates photorealistically, without looking pasted on. Do not change the background, camera angle, framing, or image quality, and do not add accessories, text, logos, or watermarks.
 > （中文一句：不改脸/五官/肤色/体型/姿势/身份，只换服装并让面料自然贴合现有姿态与身体几何，光线阴影色温匹配原图，不改背景/机位/构图/画质，不加配饰文字 logo 水印。）

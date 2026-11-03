@@ -17,7 +17,7 @@
 ### gpt-image-2（OpenAI，2026-04）
 - 模式：文生图 / 图生图 / 多图参考（多张输入图，用途靠提示词声明）
 - API 内最高 2K 分辨率；宽高比最宽 3:1；宽高比直接写进提示词（如 "Aspect ratio 16:9"）
-- 提示词字符上限：官方未公布，不写具体数字
+- 提示词字符上限：32,000 字符（OpenAPI 规范，适用于 GPT image 模型）。
 - **input_fidelity 参数**：官方口径 Image 2 **必须省略**（历史 Cookbook 编辑示例用 `input_fidelity="high"` 是旧口径，已过时）
 
 ### gpt-image-2.5（OpenAI，2026-10）
@@ -26,13 +26,13 @@
 - **迁移决策**：Image 2 已达标 → 先评 Flare，不达标再评 Sunburst；首次比较固定 quality、同输入，**先立质量再优化延迟**
 - **quality 档位**：low / medium / high / **xhigh / max** / auto（Image 2 止于 high；xhigh/max 是显式选项不是自动升级）；小字/密集信息/肖像/身份敏感编辑用 medium/high 起步比较；low 在延迟敏感场景意外地强
 - **size 输出硬约束**：边长为 16 的倍数、最长边 ≤3840、长短比 ≤3:1、总像素 655,360–8,294,400；超过 2560×1440 属实验区。常用档：1024×1536（竖）/ 1536×1024（横）/ 1024×1024（方）/ 2560×1440 / 3840×2160。快捷映射：2k=2048×2048、wide=2048×1152、tall=2160×3840、portrait=1024×1536
-- **其他参数**：n=1–10（一次多图）；background transparent 必须配 png/webp 输出（验收检查解码后 alpha 通道——"画出来的棋盘格不是透明"）；output_compression 0-100 仅 jpeg/webp；moderation auto/low 仅生成端；端点仍是 `/v1/images/generations` 与 `/v1/images/edits`
+- **其他参数**：background transparent 必须配 png/webp 输出（验收检查解码后 alpha 通道——"画出来的棋盘格不是透明"）；output_compression 0-100 仅 jpeg/webp；moderation auto/low 仅生成端；端点仍是 `/v1/images/generations` 与 `/v1/images/edits`
 - **input_fidelity**：官方 OpenAPI/SDK 仅明确 `gpt-image-1.5` 支持 `high/low`、`gpt-image-1-mini` 仅 `low`；**`gpt-image-2` 请省略**；**2.5 未列入支持名单——默认不传**。社区有"Flare 传 high 报 400、Sunburst 可能支持"的报告，官方未确认；使用前按供应商实测。
 - **prompt 上限**：32,000 字符（生成/编辑一致）
 - **编辑输入图 1–16 张**：png/webp/jpg，单张 <50MB
 - **mask**：PNG、<4MB、与首图同尺寸；多图时只作用于第一张
 - **markup（2.5 新增）**：透明 PNG 叠加在第一张图上引导编辑；须与首图同尺寸（含方向校正后）、含透明像素；**不能与 mask 同用**（OpenAPI 组件描述出现"2.5 and 2.6"，2.6 疑似在路上）
-- **n** 1–10；**partial_images** 0–3（流式）
+- **n** 1–10（一次多图）；**partial_images** 0–3（流式）
 - **safety_identifier**（安全监控；`user` 已弃用）
 - **style / response_format** 对 GPT image 模型不支持（风格写进提示词；始终返回 b64_json）
 - **模型清单**：`gpt-image-1-mini` / `1.5` / `2` / `2-2026-04-21` / `2.5-sunburst(-2026-09-08)` / `2.5-flare(-2026-09-08)` / `chatgpt-image-latest`；**`gpt-image-1` 已于 2026-10-23 关停；DALL·E 2/3 已于 2026-05-12 退役**
@@ -50,19 +50,34 @@
 - **约束**：显式写排除与不变量（no watermark / no extra text / no logos；preserve identity/geometry/layout）；编辑用 `change only {X}` + `keep everything else the same`，**每轮迭代重复保留清单**
 - **文字**：引号/全大写 + 字体/字号/位置 + 生僻词逐字母拼写；小字/密集面板用 medium/high
 - **多图**：按 `Image 1 / Image 2` 编号并描述角色，写清谁作用于谁；合成时写明元素移动到哪里
-- **迭代**：干净基础提示词 + 单变量跟进，优于一次超长；复杂提示最长约 2 分钟
+- **迭代**：干净基础提示词 + 单变量跟进，优于一次超长；复杂提示耗时可达数分钟（官方帮助：图像生成可能需要几分钟，具体取决于请求的复杂程度）
 
 ## 边界与失败模式（官方 + 实测）
 
-- **文字渲染仍不完美**：位置/清晰度需人工核对；长段文字会糊
+- **文字渲染仍不完美**：位置/清晰度需人工核对；长段文字会糊（实测）
 - **跨生成一致性有限**：角色/品牌元素无法像素级锁定
 - **版式精确落位不稳**：元素精确位置可能失败
 - **模型会自加内容**：规格/文案/品牌字样（Sunburst 实测）→ 验收必查
 - **多轮编辑累积漂移**；mask 只是引导，**不保证像素边界**；严格保留走外部合成
 - **参考图必须分工**，否则模型不知道用途；仅在文字里提"参考图"而未真传图无效
-- **安全**：上游 LLM 拒绝 + 下游输入/输出双向检查；拦截 `code=moderation_blocked`；真实人物/深度伪造风险；**C2PA + SynthID 隐形水印**（截图/重编码会剥离，是信号不是证明）
+- **安全**：上游 LLM 拒绝 + 下游输入/输出双向检查；拦截 `code=moderation_blocked`（实测）；真实人物/深度伪造风险；**C2PA + SynthID 隐形水印**（截图/重编码会剥离——实测/经验；是信号不是证明）
 
 > 事实来源（2026-11-03 核验）：ChatGPT Images 2.5 System Card（2026-09-08，deploymentsafety.openai.com PDF）、openai/openai-openapi 规范、官方 SDK 类型定义、openai-cookbook《GPT Image Generation Models Prompting Guide》（2026-04-23 Image 2 时代快照）、help.openai.com/zh-hans-cn/articles/9055440。platform.openai.com/docs/guides/image-generation 在核验时被网络策略拦截（403），上述事实取自官方 PDF/SDK/OpenAPI/Cookbook。
+
+## 社区经验（非官方，实测优先）
+
+- **文本权重默认高于参考图（社区经验）**：文本缺少强结构约束或与参考图冲突时，模型会优先按文本语义生成，参考图特征丢失。因此：绝不写与参考图矛盾的描述；参考图必须配"角色声明（锁什么/不复刻什么）"；关键结构特征用文字再强约束一遍（与"图锁结构、文写差异"互补）。
+- **浅层易保留、深层易跑偏（社区经验）**：颜色、毛发、大致轮廓等浅层特征容易保留；脸型结构、五官比例、姿态骨架、配饰位置等深层结构容易变形——深层特征靠"参考图分工 + 图锁姿势 + 文字强约束"三重保险。
+- **精细特征随机偏差（社区经验）**：斑纹数量、虎牙颗数、挑染位置等在多次生成间会漂。写法：精确计数 + 单侧描述——`只露出一颗小虎牙，不是两颗`、`眉上单侧一块斑纹，不是对称两道`。
+- **概念歧义消解（社区经验）**：避免单独使用易混名词——用 `cat-like ears` 而非 `cat`、`kigurumi fursuit head` 而非 `doll`；并要求"正面定义 + 反向排除"双保险（"是兽装头壳，不是真实动物小猫"）。
+- **选型经验（社区经验，与官方定位一致）**：Sunburst 用于角色资产固化、精细修图、参考图重绘；Flare 用于批量草图、创意发散、低成本量产。
+- **网页端 vs API（社区经验）**：网页版 ChatGPT 图像不开放 `input_fidelity` 等高级参数，仅 API 侧可调；网页端参考图保真为默认档位。
+
+## 不采信清单（社区说法与官方不符/未文档化——不得写入提示词规则）
+
+- **"模型无法生成可识别文字"**：与官方 2.5 冲突——官方已改进文字渲染并给出完整写法（引号/全大写/字体层级/逐字母拼写/质量档）。按 `prompt-rules.md` 的文字渲染规则写。
+- **"2.5 官方支持 input_fidelity=high"**：官方 OpenAPI/SDK 未列入 2.5；仅社区报告（Sunburst 可能可用、Flare 报 400）。默认不传，需按供应商实测。
+- **"官方支持 outpainting"**：官方参数面未文档化；可通过编辑+画布外扩尝试，但不得写成官方能力。
 
 ## 换模型指引
 
