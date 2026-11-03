@@ -27,11 +27,42 @@
 - **quality 档位**：low / medium / high / **xhigh / max** / auto（Image 2 止于 high；xhigh/max 是显式选项不是自动升级）；小字/密集信息/肖像/身份敏感编辑用 medium/high 起步比较；low 在延迟敏感场景意外地强
 - **size 输出硬约束**：边长为 16 的倍数、最长边 ≤3840、长短比 ≤3:1、总像素 655,360–8,294,400；超过 2560×1440 属实验区。常用档：1024×1536（竖）/ 1536×1024（横）/ 1024×1024（方）/ 2560×1440 / 3840×2160。快捷映射：2k=2048×2048、wide=2048×1152、tall=2160×3840、portrait=1024×1536
 - **其他参数**：n=1–10（一次多图）；background transparent 必须配 png/webp 输出（验收检查解码后 alpha 通道——"画出来的棋盘格不是透明"）；output_compression 0-100 仅 jpeg/webp；moderation auto/low 仅生成端；端点仍是 `/v1/images/generations` 与 `/v1/images/edits`
-- **input_fidelity**：2.5 上显式传 low/high 是"透传、支持未验证"——**默认省略** `[社区转述·待官方核实]`
+- **input_fidelity**：官方 OpenAPI/SDK 仅明确 `gpt-image-1.5` 支持 `high/low`、`gpt-image-1-mini` 仅 `low`；**`gpt-image-2` 请省略**；**2.5 未列入支持名单——默认不传**。社区有"Flare 传 high 报 400、Sunburst 可能支持"的报告，官方未确认；使用前按供应商实测。
+- **prompt 上限**：32,000 字符（生成/编辑一致）
+- **编辑输入图 1–16 张**：png/webp/jpg，单张 <50MB
+- **mask**：PNG、<4MB、与首图同尺寸；多图时只作用于第一张
+- **markup（2.5 新增）**：透明 PNG 叠加在第一张图上引导编辑；须与首图同尺寸（含方向校正后）、含透明像素；**不能与 mask 同用**（OpenAPI 组件描述出现"2.5 and 2.6"，2.6 疑似在路上）
+- **n** 1–10；**partial_images** 0–3（流式）
+- **safety_identifier**（安全监控；`user` 已弃用）
+- **style / response_format** 对 GPT image 模型不支持（风格写进提示词；始终返回 b64_json）
+- **模型清单**：`gpt-image-1-mini` / `1.5` / `2` / `2-2026-04-21` / `2.5-sunburst(-2026-09-08)` / `2.5-flare(-2026-09-08)` / `chatgpt-image-latest`；**`gpt-image-1` 已于 2026-10-23 关停；DALL·E 2/3 已于 2026-05-12 退役**
 - **Sunburst 实测结论（作者 5 次全参数实测，[用户实测] 级）**：
   1. **成功出图 ≠ 内容正确——模型会自行发明规格与文案**（手表加编造参数、产品图加未批准的 "NO SUGAR"）→ **验收必查项：排查模型自加的文字/参数/品牌**（联动海报护栏文字白名单）
   2. 版式遵循是部分的（要求三层封闭楼层只出两层、指定方向的阴影画反）——参考图驱动的版式不能假定 100% 遵循，验收对照逐项核
   3. **models.list 查不到 / retrieve 404 ≠ 不可用**——元数据查询不能判定可用性，以实际生成端点响应为准
+
+## 官方提示词要点（GPT Image，2026-11 核验）
+
+- **结构顺序**：背景/场景 → 主体 → 关键细节 → 约束；写明用途（广告/UI/信息图/设定集）设定"模式"；复杂需求用短标签分行，不写一整段
+- **写实**：**直接写 `photorealistic`**（官方 Cookbook 明确建议，强力触发写实模式）；相机规格会被宽松解释，主要用于高层观感而非物理模拟
+- **构图**：写明取景/视角/角度/光线；版式敏感时点名位置（logo 右上/主体居中留白）
+- **人物**：官方句式 `full body visible, feet included` / `child-sized relative to the table` / `looking down at the open book, not at the camera` / `hands naturally gripping the handlebars`
+- **约束**：显式写排除与不变量（no watermark / no extra text / no logos；preserve identity/geometry/layout）；编辑用 `change only {X}` + `keep everything else the same`，**每轮迭代重复保留清单**
+- **文字**：引号/全大写 + 字体/字号/位置 + 生僻词逐字母拼写；小字/密集面板用 medium/high
+- **多图**：按 `Image 1 / Image 2` 编号并描述角色，写清谁作用于谁；合成时写明元素移动到哪里
+- **迭代**：干净基础提示词 + 单变量跟进，优于一次超长；复杂提示最长约 2 分钟
+
+## 边界与失败模式（官方 + 实测）
+
+- **文字渲染仍不完美**：位置/清晰度需人工核对；长段文字会糊
+- **跨生成一致性有限**：角色/品牌元素无法像素级锁定
+- **版式精确落位不稳**：元素精确位置可能失败
+- **模型会自加内容**：规格/文案/品牌字样（Sunburst 实测）→ 验收必查
+- **多轮编辑累积漂移**；mask 只是引导，**不保证像素边界**；严格保留走外部合成
+- **参考图必须分工**，否则模型不知道用途；仅在文字里提"参考图"而未真传图无效
+- **安全**：上游 LLM 拒绝 + 下游输入/输出双向检查；拦截 `code=moderation_blocked`；真实人物/深度伪造风险；**C2PA + SynthID 隐形水印**（截图/重编码会剥离，是信号不是证明）
+
+> 事实来源（2026-11-03 核验）：ChatGPT Images 2.5 System Card（2026-09-08，deploymentsafety.openai.com PDF）、openai/openai-openapi 规范、官方 SDK 类型定义、openai-cookbook《GPT Image Generation Models Prompting Guide》（2026-04-23 Image 2 时代快照）、help.openai.com/zh-hans-cn/articles/9055440。platform.openai.com/docs/guides/image-generation 在核验时被网络策略拦截（403），上述事实取自官方 PDF/SDK/OpenAPI/Cookbook。
 
 ## 换模型指引
 
@@ -43,9 +74,9 @@
 6. **档案卡带核对纪律**：每份档案注明核对日期与来源（官方链接/README 副本）；二手转述的能力参数（社区整理的"支持/不支持"）**不直接入库**——入库前按官方文档重核（模型版本迭代快，几个月前的矩阵就过期）
 7. **版本迁移"原样先测"**：已验证的提示词换模型新版本时，**原样先测一轮，只修实测出的具体失败**——不为版本号预防性重写（重写=丢掉已验证的部分，还引入新变量）
 
-## 已知差异备忘（[待验证]——实测后回填裁决）
+## 已知差异备忘（实测后回填裁决）
 
-- photorealistic 英文词的效力 A/B —— 归属与写法见 knowledge-index.md 负面词适配规则（唯一权威），本文件不再重复。
+- photorealistic 英文词的效力：官方 Cookbook 已明确建议写实类直接写（2026-11 核验）——完整裁决见 knowledge-index.md 负面词适配规则（唯一权威），本文件不再重复。
 
 ## 供应商差异备忘（同模型不同 provider——实测确认后登记）
 

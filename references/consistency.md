@@ -80,6 +80,7 @@
 3. **7-9 个视觉要素**：太少不够锚定，太多稀释重点
 4. **道具同理**：材质/颜色/尺寸/磨损逐项具体，`一把长柄黑伞，伞面有轻微使用褶皱，木质伞柄`✓
 5. **着装状态逐部位列明"有/无"（V2.9——实测教训：锚定写"上身无衣物"，生成时模型仍给角色加了肩带披挂）**：单一否定句锁不住着装——模型对"无衣物"的先验会自动补配饰/遮挡物。角色处于非常规着装状态（裸露/半裸/破损/泳装/盔甲卸下）时，锚定短语与受影响画面的提示词必须**逐部位列有/无**：`肩带无/披挂无/护臂无/腰带无/腰间兽皮裙有/腕部藤蔓环扣有`——与 02 锚定表逐字对齐，跨画面逐字复用。常规着装（完整现代/古代服饰）不需要此清单，写全服饰要素即可
+6. **年轻人物皮肤状态标准句（默认追加，逐字复用）**：皮肤状态：年轻紧致光滑，面部平滑——无 法令纹、无 木偶纹、无任何皱纹与褶皱，笑容自然不挤压出面部纹路。与 "natural skin texture, visible pores" 并存——光滑但真实，不塑料；笑容镜头同样适用（防笑出纹路）。
 
 ## 三、跨资产一致性操作规则（图片端多图参考）
 
@@ -150,6 +151,11 @@
 | 换装 | 新服装锚 + 面部特写（+场景） | 姿势/构图/表情/光线 + "服装以 @Ref 为准" | 沿用旧服装锚定短语 → 衣服回漂；挂旧版三视图 → 混搭 |
 | 换姿势 | 面部特写 + 三视图（+场景） | 目标姿势写具体（FACS/身体序列），参考图声明不复刻站姿 | 未声明不复刻 → 出正立站姿；姿势描述用"自然放松"式空话 |
 | 换表情 | 面部特写 + 场景 | 表情按 FACS 物理化（肌肉/瞳孔/注视），不用情绪标签 | 喂表情参考图又与中性锚冲突；只写"生气的表情"→ 表情不到位 |
+
+> **官方换装范式（OpenAI Cookbook 原文，可逐字复用）**：Do not change her face, facial features, skin tone, body shape, pose, or identity in any way. Preserve her exact likeness, expression, hairstyle, and proportions. Replace only the clothing, fitting the garments naturally to her existing pose and body geometry with realistic fabric behavior. Match lighting, shadows, and color temperature to the original photo so the outfit integrates photorealistically, without looking pasted on. Do not change the background, camera angle, framing, or image quality, and do not add accessories, text, logos, or watermarks.
+> （中文一句：不改脸/五官/肤色/体型/姿势/身份，只换服装并让面料自然贴合现有姿态与身体几何，光线阴影色温匹配原图，不改背景/机位/构图/画质，不加配饰文字 logo 水印。）
+>
+> **角色锚工作流（官方 6.4）**：先建角色锚图；后续 edit 逐项列"相同项"（同款服装/同五官/同比例/同配色）并写 `do not redesign the character`。
 
 ### 降级路径（文本模型无视觉能力时）
 
