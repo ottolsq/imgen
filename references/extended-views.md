@@ -21,6 +21,7 @@
 - **条件强制**（V2.0）：场景用于 ≥3 张画面 或 需要多机位素材 → 四视图必做（不再是可选项）；单画面或每画面换场景的项目不需要
 - **"生成/登记"与"引用"分开（消除与"零引用不生成"的冲突）**：四视图命中条件后，4 张**全部生成并登记进 02**（这是资产登记，不算浪费——它们是"机位依据"而非"每个画面都引用"）；但生成某个画面时**只引用该画面实际用到的视图**（该画面机位用母版就引母版、用对向就引对向），没被任何画面引用的视图不构成"零引用资产"。判据：**登记=规划，引用=消费；零引用不生成约束的是"引用/消费"层，不是"登记"层**
 - **LOCATION MAP 配套**：多角色场景做四视图时，02 场景锚定同步写 LOCATION MAP（各角色/关键道具的固定位置、朝向、相互距离）——四视图锁空间，LOCATION MAP 锁人物站位，两者共同防"换机位就换场景/人物瞬移"
+- **大场景空间写法补充**（建筑/大场景图）：`Viewpoint is slightly low and wide, emphasizing vertical scale and shadow` + 人物比例锚 `a few small human figures for scale, but keep the architecture dominant` + 图内尺度标注（`Nave Height 28.5 m`）+ K 值入句（`cove lighting at 3000K`）
 
 ## 二、十二宫格多机位素材图（同一场景的机位×景别素材矩阵）
 
@@ -46,17 +47,3 @@
 3. 矩阵图本身存入 assets/ 供人工参考（**不直接作为生图参考图**——12 格拼贴会引入分割线干扰，与拼贴设定卡同理；实际生成情景图时用对应视图/锚定图重新单独生成）
 
 > 与"三层资产架构"的关系：十二宫格属于**人工参考层**（给用户看、辅助画面规划决策），不属于视觉锚定层（不喂给生图模型）。
-
-## 三、六格故事板（storyboard sheet——成套画面预览的人工参考层）
-
-一张 3×2 网格图把一组 6 个关键画面画成故事板，每格四段式固定写法（画廊成品验证）：
-
-```
-3×2 grid storyboard. Each panel:
-Panel N — {景别}: {画面内容一句}. Info: "PANEL 1 · EXT. ALLEY · NIGHT · WIDE / static / 2s"
-```
-
-- 每格 Info 行含：**场景 slug（INT/EXT·地点·日夜）+ 景别 + 镜头运动（pan-L 45°/tilt-up 30°/crane-down）+ 时长 + SFX 注记**
-- 可加红铅笔箭头标注运镜方向（人工参考用，不喂模型）
-- 用途定位同十二宫格：**人工参考层**——GATE1 前给用户看画面节奏、圈选画面；不作为生图参考图（多格拼贴引入分割线干扰）
-- 与场景空间写法配套（建筑/大场景图）：`Viewpoint is slightly low and wide, emphasizing vertical scale and shadow` + 人物比例锚 `a few small human figures for scale, but keep the architecture dominant` + 图内尺度标注（`Nave Height 28.5 m`）+ K 值入句（`cove lighting at 3000K`）
