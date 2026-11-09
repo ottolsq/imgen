@@ -1,7 +1,7 @@
 # imgen 轻量分析与编辑模式 · 设计 Spec
 
 - 日期：2026-11-09
-- 状态：待用户评审
+- 状态：已实施（2026-11-09，commit 483f4eb——实施记录与 RED/GREEN 验证见 tests/verification-record.md §16）
 - 范围：imgen skill（SKILL.md + references/ + assets/templates.md）
 
 ## 1. 背景与目标
