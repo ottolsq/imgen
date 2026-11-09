@@ -39,6 +39,7 @@ description: Use when the user wants to create AI image assets or image prompts 
 | 锚定表结构、锚定短语写作规则、空间布局登记、跨资产一致性（图片端多图参考）、参考图驱动的生成模式、失效传播 | references/consistency.md |
 | 去AI味词汇、表面处理两档与塑形约束、构图多样性、画面张力四法、画面文字物理化 | references/realism.md |
 | 15 风格词条、色彩基调十六进制色板、参考图风格提取（解梦卡） | references/styles.md |
+| 动漫/风格化设定卡九段结构（全身角色描述）、比例变体 DNA 管理、成品范例库 | references/prompt-rules.md 骨架 0·0e / references/exemplars.md |
 | 生图模型能力档案卡、换模型指引、供应商差异备忘 | references/models.md |
 | FACS 物理化表演引擎、表情词条库、身体姿态库、生理反应库 | references/expressions.md |
 | 负面词图片端裁决（全库唯一权威） | references/knowledge-index.md |
@@ -56,6 +57,7 @@ description: Use when the user wants to create AI image assets or image prompts 
 | references/styles.md | **阶段1 定风格时**——选定风格后立即定色板 |
 | references/consistency.md | **阶段1 建锚定表（02）时**；跨资产一致性出问题时 |
 | references/realism.md | **阶段2 写人物/场景/情景提示词时** |
+| references/exemplars.md | **写动漫/风格化角色设定卡提示词时**（0e 九段结构的范例全文与批注）；用户交新范例时登记入库 |
 | **references/knowledge-index.md** | **阶段1 定风格、阶段2 资产规划时先读此索引**——再按命中场景只读一个扩展文件：表情/表演状态→expressions.md；高质感或动漫设定→cinema-grade-params.md（风格内容若并入风格圣经，须在 GATE1 前完成）；多机位/多视图→extended-views.md；情绪画面→emotion-craft.md；提示词被拦截→content-safety.md。**expressions.md 读取时点提前**：写情景图的表演状态时就读，不等用户要表情板 |
 | assets/templates.md | 创建/续写 01-03 时 |
 | README.md / tests/ | 开发与验收文档，**运行时永不读取** |
@@ -183,7 +185,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 | 4 | **正向引导 > 负面约束**：画面类负面词改写成正向；**图片端承重负面保留**（版式类/文字类/内容边界类/身份划界类），分端裁决唯一权威 | knowledge-index 负面词适配规则 / prompt-rules 0.3 |
 | 5 | **道具锚定**：命中六条判定任一 → 独立参考图+锚定短语；有状态变化每状态一张；可分离组合道具拆分出图；**道具单一存在**（持械手/鞘位/双手占用三要素） | prompt-rules 一·0 与 0d / consistency 道具锚定 |
 | 6 | **顺模型认知写**：语义绑定三层（绑位置关系/绑因果/绑先验概念包）；关系反先验必写**排他性否定**；复杂姿态用**图锁姿势**、**入画即成**（不写成型过程） | prompt-rules 0.1·0.2 |
-| 7 | **参考图六条硬标准 + 头身分离**：一张图只回答一个问题；脸单独一张占 6 成以上；3-5 张最优 ≤8；**0a/0b 分两张出图**（**唯一例外**：动漫/国漫设定项目可用 cinema-grade-params 二节的四视图配方合出，脸区占足像素） | prompt-rules 0.4 / consistency 三节 |
+| 7 | **参考图六条硬标准 + 头身分离**：一张图只回答一个问题；脸单独一张占 6 成以上；3-5 张最优 ≤8；**0a/0b 分两张出图**（**例外仅限动漫/国漫设定项目**：可用 cinema-grade-params 二节的四视图配方合出，或按 0e 九段结构出单图设定卡——均须脸区占足像素） | prompt-rules 0.4 / consistency 三节 |
 | 8 | **互挂参考 + 双向作用域**：情景图必挂角色锚定图+场景母版；每张参考图写"锁定{维度}；不复刻{维度}"，禁止"综合一下" | consistency 三节（互挂参考/最小参考集/作用域声明） |
 | 9 | **存量优先 + 零引用不生成**：建矩阵前先查存量，命中即复用；零引用资产不生成（次要角色链式参考是默认例外）；挂图按"画面里有什么"不按"属于哪个场"。**例外（USER-LOCKED）**：用户点名的成品资产（独立服装/道具/场景设定图等非纯参考图资产）不受零引用限制——USER-LOCKED > 系统默认，矩阵"生成必要性"列注明 USER-LOCKED 理由 | prompt-rules 一·4 / consistency 三节 |
 | 10 | **构图效果库不落灰**：构图多样性/张力四法/表面两档按题材主动选用；禁全项目只用"白底居中平光"基础款；去AI味 ≠ 全部压暗做旧 | realism 三节·三·五 / prompt-rules 质量自检 |

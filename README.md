@@ -24,6 +24,7 @@ imgen/
 │   ├── consistency.md          # 核心：锚定表 / 跨资产一致性 / 参考图驱动生成 / 失效传播
 │   ├── realism.md              # 核心：去AI味词库 / 表面处理 / 构图多样性 / 画面文字物理化
 │   ├── styles.md               # 核心：15 风格库 + 色彩基调色板 + 解梦卡提取
+│   ├── exemplars.md            # 扩展：成品范例库（角色设定卡范例全文与逐段批注）
 │   ├── models.md               # 核心：生图模型能力档案卡 + 供应商差异备忘
 │   ├── knowledge-index.md      # 路由：扩展知识索引 + 负面词图片端裁决（唯一权威）
 │   ├── expressions.md          # 扩展：FACS 表演引擎 / 表情词条 / 身体姿态 / 生理反应
@@ -36,7 +37,7 @@ imgen/
 └── tests/                      # 验收记录（运行时不读）
 ```
 
-结构口径：`references/` = 核心 5（prompt-rules / consistency / realism / styles / models）+ 扩展 5（expressions / extended-views / cinema-grade-params / emotion-craft / content-safety）+ 路由 1（knowledge-index）。
+结构口径：`references/` = 核心 5（prompt-rules / consistency / realism / styles / models）+ 扩展 6（expressions / extended-views / cinema-grade-params / emotion-craft / content-safety / exemplars）+ 路由 1（knowledge-index）。
 
 ## 不做什么（能力边界）
 
@@ -78,7 +79,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1（必须停下）→ 阶段2 资
 
 1. **规则单一权威（重复即缺陷）**：每条规则只有一个"家"，见 SKILL.md 的规则归属表；同一规则出现在两个文件，迟早漂移。发现重复时保留归属表里的家，其余改为指针。
 2. **实测教训不许删**：带"实测教训/实测依据"的段落是踩坑换来的，重构措辞时可以改语境，但不能删掉教训本身。
-3. **扩展文件命中才读**：expressions / extended-views / cinema-grade-params / emotion-craft / content-safety 只有命中 knowledge-index 的场景才打开；未命中一个都不读。
+3. **扩展文件命中才读**：expressions / extended-views / cinema-grade-params / emotion-craft / content-safety / exemplars 只有命中 knowledge-index 的场景才打开；未命中一个都不读。（exemplars 的命中场景：写动漫/风格化角色设定卡；用户交新范例。）
 4. **参考图驱动生成模式的单一权威**在 `consistency.md` 三·五节——其他文件只引用，不复制展开。
 5. **本 README 与 `tests/` 运行时永不读取**：其中出现的视频/开发类词汇不构成 skill 的运行指令。
 
