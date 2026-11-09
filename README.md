@@ -18,12 +18,13 @@ imgen 提取自 **vigen 2026-11-01 版本（源 commit `82f2be7835e829996ae2b205
 
 ```
 imgen/
-├── SKILL.md                    # 入口：GATE0 问卷 + 两停点工作流 + Module Map + 12 条硬规则
+├── SKILL.md                    # 入口：GATE0 问卷 + 两停点工作流 + Module Map + 13 条硬规则
 ├── references/
 │   ├── prompt-rules.md         # 核心：图片骨架 / 12 必填槽位 / A-B 校验
 │   ├── consistency.md          # 核心：锚定表 / 跨资产一致性 / 参考图驱动生成 / 失效传播
 │   ├── realism.md              # 核心：去AI味词库 / 表面处理 / 构图多样性 / 画面文字物理化
 │   ├── styles.md               # 核心：15 风格库 + 色彩基调色板 + 解梦卡提取
+│   ├── image-ops.md            # 核心：轻量分析与编辑（反推/迁移/合成/清理）+ 能力自检与降级
 │   ├── exemplars.md            # 扩展：成品范例库（角色设定卡范例全文与逐段批注）
 │   ├── models.md               # 核心：生图模型能力档案卡 + 供应商差异备忘
 │   ├── knowledge-index.md      # 路由：扩展知识索引 + 负面词图片端裁决（唯一权威）
@@ -37,13 +38,18 @@ imgen/
 └── tests/                      # 验收记录（运行时不读）
 ```
 
-结构口径：`references/` = 核心 5（prompt-rules / consistency / realism / styles / models）+ 扩展 6（expressions / extended-views / cinema-grade-params / emotion-craft / content-safety / exemplars）+ 路由 1（knowledge-index）。
+结构口径：`references/` = 核心 6（prompt-rules / consistency / realism / styles / models / image-ops）+ 扩展 6（expressions / extended-views / cinema-grade-params / emotion-craft / content-safety / exemplars）+ 路由 1（knowledge-index）。
+
+## 轻量模式（分析与编辑已有图）
+
+对已有图做**提示词反推、视觉风格提取、风格迁移、角色融入场景、清理去噪**的一次性任务：不走 GATE0 问卷、不建 01-03，按意图路由第 1 条进入 `references/image-ops.md` 四模式执行；产物可经升级通道转入项目（反推结论入 02 需用户逐项确认，OPEN 起步）。
 
 ## 不做什么（能力边界）
 
 - 不生成视频成片、分镜、运镜或视频提示词——这类需求转 vigen。
 - 不调用任何生图 API；交付物是提示词与锚定文件，图片由用户在自己的工具里生成。
 - 不写剧本/故事板；画面需求只到"这张图怎么拍/怎么画"为止。
+- **已有图清理不承诺像素保真**：生成式重绘每轮重画，"只去噪不改内容"做不到——需要逐像素不变的区域走外部工具（image-ops 模式 D 回退出口）。
 
 ## 第一次使用怎么读
 

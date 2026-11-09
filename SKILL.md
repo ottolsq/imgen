@@ -1,6 +1,6 @@
 ---
 name: imgen
-description: Use when the user wants to create AI image assets or image prompts — 人物设定图/三视图/角色转面/面部特写/表情板/微表情/服装设计图/换装/服装设定/道具设定图/场景概念图/环境图/情景图/画面插画/海报/文生图提示词/AI绘画/绘画提示词/生图/角色资产/多视图/四视图/一致性锚定/去AI味/风格圣经/参考图组配/character sheet/turnaround/concept art/reference sheet. NOT for video generation or 分镜/运镜/视频提示词（use vigen）, NOT for calling image-generation APIs directly, NOT for screenplay writing or storyboarding.
+description: Use when the user wants to create AI image assets or image prompts — 人物设定图/三视图/角色转面/面部特写/表情板/微表情/服装设计图/换装/服装设定/道具设定图/场景概念图/环境图/情景图/画面插画/海报/文生图提示词/AI绘画/绘画提示词/生图/角色资产/多视图/四视图/一致性锚定/去AI味/风格圣经/参考图组配/character sheet/turnaround/concept art/reference sheet；分析与编辑已有图 — 提示词反推/逆向/图片分析、视觉风格提取、风格迁移/换风格、角色合成/融入场景、去噪/修图/清理重绘. NOT for video generation or 分镜/运镜/视频提示词（use vigen）, NOT for calling image-generation APIs directly, NOT for screenplay writing or storyboarding.
 ---
 
 # imgen（AI 图片资产制作辅助）
@@ -24,6 +24,8 @@ description: Use when the user wants to create AI image assets or image prompts 
 | 环境 | 场景概念图、四视图、环境球 | prompt-rules 一·2 / extended-views / realism 一·媒介句 |
 | 画面 | 情景图 H1-H4、插画、海报 | prompt-rules 一·3 / realism 三节 |
 
+> **以上是"产出成套资产"的六条产线。对已有图做反推/风格迁移/角色合成/去噪清理/风格提取的一次性任务，不走产线与 GATE0——见意图路由第 1 条（分析与编辑轻量模式，references/image-ops.md）。**
+
 ## 本文件的定位（读之前先懂）
 
 **本文件只写"何时做什么"，不写"具体怎么写"。** 每条规则的全文只有一个家（下表），本文件给一句可判定的要点 + 指针。
@@ -42,6 +44,8 @@ description: Use when the user wants to create AI image assets or image prompts 
 | 动漫/风格化设定卡九段结构（全身角色描述）、比例变体 DNA 管理、成品范例库 | references/prompt-rules.md 骨架 0·0e / references/exemplars.md |
 | 生图模型能力档案卡、换模型指引、供应商差异备忘 | references/models.md |
 | FACS 物理化表演引擎、表情词条库、身体姿态库、生理反应库 | references/expressions.md |
+| 轻量分析与编辑四模式（反推/迁移/合成/清理）、能力自检与降级路径、轻量模式对齐规则 | references/image-ops.md |
+| 漂移归因表（脸漂/动作漂→根因→处置）、身份验收闭环、编辑链放弃阈值、参考图固定排序 | references/consistency.md 三·七 |
 | 负面词图片端裁决（全库唯一权威） | references/knowledge-index.md |
 | 扩展知识路由（表情/电影级参数/多视图/情绪/内容安全） | references/knowledge-index.md |
 | 01-03 项目文件模板与填空槽位 | assets/templates.md |
@@ -58,6 +62,7 @@ description: Use when the user wants to create AI image assets or image prompts 
 | references/consistency.md | **阶段1 建锚定表（02）时**；跨资产一致性出问题时 |
 | references/realism.md | **阶段2 写人物/场景/情景提示词时** |
 | references/exemplars.md | **写动漫/风格化角色设定卡提示词时**（0e 九段结构的范例全文与批注）；用户交新范例时登记入库 |
+| **references/image-ops.md** | **分析与编辑（轻量模式）时**——反推/风格迁移/角色合成/清理去噪/风格提取的一次性任务（不走 GATE0/不建 01-03）；能力自检与降级路径的唯一权威；漂移问题查 consistency 三·七归因表 |
 | **references/knowledge-index.md** | **阶段1 定风格、阶段2 资产规划时先读此索引**——再按命中场景只读一个扩展文件：表情/表演状态→expressions.md；高质感或动漫设定→cinema-grade-params.md（风格内容若并入风格圣经，须在 GATE1 前完成）；多机位/多视图→extended-views.md；情绪画面→emotion-craft.md；提示词被拦截→content-safety.md。**expressions.md 读取时点提前**：写情景图的表演状态时就读，不等用户要表情板 |
 | assets/templates.md | 创建/续写 01-03 时 |
 | README.md / tests/ | 开发与验收文档，**运行时永不读取** |
@@ -140,15 +145,16 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 - **校验结果**：A 层关键门 A1-A5 全过 / 哪条没过怎么修 / 哪条 OPEN 及回填时点 + B 层本轮抽了哪 3-5 条
 - **未通过项点名**：没过的校验项、待补的参考图，不藏
 - **项目路径** + 各文件一行说明
-- **三条反虚报**见硬规则 12
+- **三条反虚报**见硬规则 12（三反虚报）
 
 ## 意图路由（按优先级判断）
 
-1. **定向修改**：项目目录已存在 + 指令指向具体资产/文件/阶段 → 只改对应文件的相关部分，其余不动
-2. **续作**：项目目录已存在 + 指令模糊（"继续"）→ 检查 01-03 完成度，从第一个未完成阶段继续
-3. **新项目**：新的需求/参考图 → GATE0 问卷 → 阶段1 跑起（经 GATE1）
-4. **新增资产**：项目已开工 + 用户要加角色/服装/道具/场景/画面 → **先查存量**；补锚定条目（仅新增实体）；**插资产编号不重排**（A02 与 A03 之间加 A02a，已有编号一律不变）；只写新增资产的提示词，其余不碰；变更记录追加进 01
-5. **阶段重做**：明确要求重做某文件 → 重产该文件，并按失效传播规则标记下游（consistency.md 四节）
+1. **分析与编辑（轻量模式）**：用户要对已有图做**反推/风格迁移/角色合成/清理去噪/风格提取**，或从已有图提取设定——一次性任务，不建 01-03、不走 GATE0 问卷 → 读 references/image-ops.md 按模式执行；产物要发展成成套资产时转"新项目"分支（反推结论可带入 02，OPEN 起步）
+2. **定向修改**：项目目录已存在 + 指令指向具体资产/文件/阶段 → 只改对应文件的相关部分，其余不动
+3. **续作**：项目目录已存在 + 指令模糊（"继续"）→ 检查 01-03 完成度，从第一个未完成阶段继续
+4. **新项目**：新的需求/参考图 → GATE0 问卷 → 阶段1 跑起（经 GATE1）
+5. **新增资产**：项目已开工 + 用户要加角色/服装/道具/场景/画面 → **先查存量**；补锚定条目（仅新增实体）；**插资产编号不重排**（A02 与 A03 之间加 A02a，已有编号一律不变）；只写新增资产的提示词，其余不碰；变更记录追加进 01
+6. **阶段重做**：明确要求重做某文件 → 重产该文件，并按失效传播规则标记下游（consistency.md 四节）
 
 **单点修改复查纪律**：修改任何一个资产锚定/提示词后，**回读全部引用它的画面（情景图）提示词**，核对姿势/着装/持握/位置一致性；**动手前先一句话复述你理解的内容**（"我理解是：正面站姿，剑在右手，鞘空着挂左腰"），歧义未消才问用户。改一处看一处=改出瞬移与两套设定。
 
@@ -173,7 +179,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 
 **能力实测优先于锁定记录**（实测教训：GATE0 锁定的"某模型支持参考图 N 张"因网关裁剪而失效）：GATE0 锁定的能力清单是**规划依据不是保证**——**检查点化**：锁定模型时注明供应商/网关，生成前对当前供应商实测探测一次关键能力（多图参考数/输出尺寸上限/关键参数），已登记差异查 models.md"供应商差异备忘"节；实测与备忘冲突时以当次实测为准并回填，**不反复重试已判定不支持的能力**。
 
-## 硬规则（12 条 · 要点 + 指针）
+## 硬规则（13 条 · 要点 + 指针）
 
 违反任一条 = 输出不合规。要点写到"能自判"即可；槽位、例句、参数读它的家。
 
@@ -191,6 +197,7 @@ GATE0 问卷+对齐 → 阶段1 锚定 ─GATE1─→ 阶段2 资产矩阵+提�
 | 10 | **构图效果库不落灰**：构图多样性/张力四法/表面两档按题材主动选用；禁全项目只用"白底居中平光"基础款；去AI味 ≠ 全部压暗做旧 | realism 三节·三·五 / prompt-rules 质量自检 |
 | 11 | **内容安全反应式降级**：高危题材正常写，不预防性降敏；只有命中**已登记模式**才复用已验证解法；被拦走降级阶梯，**不重复提交同一措辞**；通过后登记模式并全项目排查同款 | content-safety 二·三·五节 / knowledge-index |
 | 12 | **文件即真相 + 汇报三反虚报**：决策立即落盘；①不说"已出图"（交付的是提示词）②没看过生成结果不说"效果很好"③引用用户素材被截断/不全要明说，不假装读过全文 | 本文件效率义务 / templates 结果状态 |
+| 13 | **反推 ≠ 锚定**：从已有图反推出的文字（识图是降采样语义级，细节是猜的）禁止直接当锚定短语——锚定信息源只有参考图像素 + 用户确认；反推产物入 02 必须逐项经用户确认（OPEN 起步、GATE1 冻结）；身份/动作锁定靠参考图，不靠反推文字 | image-ops 模式 A / prompt-rules 0.4（反推≠锚定） |
 
 ## 效率义务（不降质量，只去浪费）
 
